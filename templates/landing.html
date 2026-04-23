@@ -17,7 +17,7 @@
         </p>
         <div class="hero-actions">
             <a href="{{ url_for('register') }}" class="btn-primary">Create free account</a>
-            <a href="#how-it-works" class="btn-secondary">See how it works</a>
+            <button type="button" class="btn-secondary js-modal-trigger">See how it works</button>
         </div>
     </div>
     <div class="hero-visual">
@@ -96,4 +96,58 @@
     </div>
 </section>
 
+<div class="modal-overlay js-modal-overlay">
+    <div class="modal-content js-modal">
+        <button type="button" class="modal-close js-modal-close" aria-label="Close">&times;</button>
+        <div class="modal-video">
+            <iframe id="modal-iframe" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function() {
+    const modalOverlay = document.querySelector('.js-modal-overlay');
+    const modal = document.querySelector('.js-modal');
+    const modalTrigger = document.querySelector('.js-modal-trigger');
+    const modalClose = document.querySelector('.js-modal-close');
+    const modalIframe = document.getElementById('modal-iframe');
+    const YOUTUBE_VIDEO_URL = 'https://www.youtube.com/embed/dQw4w9WgXcQ';
+
+    function openModal() {
+        modalOverlay.classList.add('active');
+        modalIframe.src = YOUTUBE_VIDEO_URL + '?autoplay=1';
+    }
+
+    function closeModal() {
+        modalOverlay.classList.remove('active');
+        modalIframe.src = '';
+    }
+
+    if (modalTrigger) {
+        modalTrigger.addEventListener('click', openModal);
+    }
+
+    if (modalClose) {
+        modalClose.addEventListener('click', closeModal);
+    }
+
+    if (modalOverlay) {
+        modalOverlay.addEventListener('click', function(e) {
+            if (e.target === modalOverlay) {
+                closeModal();
+            }
+        });
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
+            closeModal();
+        }
+    });
+})();
+</script>
 {% endblock %}
